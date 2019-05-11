@@ -1,115 +1,151 @@
 $(document).ready(function() {
 
+	// ******* NUMBER ARRAYS *******
 
+	// random computer variable array
+	var rand = [];
 
-	var compPick = Math.floor(Math.random() * 102) + 19; 
-		console.log("compPick: " + compPick); 
-		$(".randomNumber").html(compPick); 
-
-	// var randomArray = []; 
-	// 	console.log("randomArray: " + randomArray); 
-
-	// for (i = 0 ; i < 4 ; i++) {
-	// 	var gemNumber = Math.floor(Math.random() * 12) + 1; 
-	// 		console.log("gemNumber: " + gemNumber); 
-	// 	randomArray.push(gemNumber); 
-	// }
-
-	var gemOne = Math.floor(Math.random() * 12) + 1; 
-		console.log("Gem 1: " + gemOne); 
-		$("#img1").html("<img src=" + "assets/images/image1.png" + " value=" + gemOne + ">"); 
-
-	var gemTwo = Math.floor(Math.random() * 12) + 1; 
-		console.log("Gem 2: " + gemTwo); 
-		$("#img2").html("<img src=" + "assets/images/image2.png" + " value=" + gemTwo + ">"); 
-
-	var gemThree = Math.floor(Math.random() * 12) + 1; 
-		console.log("Gem 3: " + gemThree); 
-		$("#img3").html("<img src=" + "assets/images/image3.png" + " value=" + gemThree + ">");
-	
-	var gemFour = Math.floor(Math.random() * 12) + 1; 
-		console.log("Gem 4: " + gemFour); 
-		$("#img4").html("<img src=" + "assets/images/image4.png" + " value=" + gemFour + ">");
-		
-	var wins = 0; 
-		console.log("wins: " + wins); 
-
-	var losses = 0; 
-		console.log("losses: " + losses); 
-
-	var score = 0; 
-		console.log("score: " + score); 
-
-	function reset () {
-		compPick = Math.floor(Math.random() * 102) + 19; 
-			console.log("compPick: " + compPick); 
-		$(".randomNumber").html(compPick); 
-
-		score = 0; 
-		$(".scoreDisplay").html(score); 
-
-		gemOne = Math.floor(Math.random() * 12) + 1;  
-			console.log("Gem 1: " + gemOne); 
-		$("#img1").html("<img src=" + "assets/images/image1.png" + " value=" + gemOne + ">"); 
-
-		gemTwo = Math.floor(Math.random() * 12) + 1; 
-			console.log("Gem 2: " + gemTwo); 
-		$("#img2").html("<img src=" + "assets/images/image2.png" + " value=" + gemTwo + ">"); 
-
-		gemThree = Math.floor(Math.random() * 12) + 1; 
-			console.log("Gem 3: " + gemThree); 
-		$("#img3").html("<img src=" + "assets/images/image3.png" + " value=" + gemThree + ">");
-	
-		gemFour = Math.floor(Math.random() * 12) + 1; 
-			console.log("Gem 4: " + gemFour); 
-		$("#img4").html("<img src=" + "assets/images/image4.png" + " value=" + gemFour + ">");
-
-		$("img").on("click", function () {
-			var newScore = score += parseInt($(this).attr("value")); 
-				console.log("New Score: " + newScore); 
-			$(".scoreDisplay").html(newScore); 
-
-			if(newScore === compPick) { 
-				wins++ ; 
-				$(".wins").html("Wins: " + wins); 
-					console.log("Wins: " + wins); 
-					reset(); 
-			
-			} 
-
-			else if(newScore > compPick) {
-				losses++ ; 
-				$(".losses").html("Losses: " + losses); 
-					console.log("Losses: " + losses); 
-					reset(); 
-				
-			}
-
-		}); 
-
-
-
+	for (var r = 19; r < 121; r++) {
+		rand.push(r);
 	}
 
-	$("img").on("click", function () {
-		var newScore = score += parseInt($(this).attr("value")); 
-			console.log("New Score: " + newScore); 
-		$(".scoreDisplay").html(newScore); 
+	// crystal numbers array
+	var crystals = [];
 
-		if(newScore === compPick) { 
-			wins++ ; 
-			$(".wins").html("Wins: " + wins); 
-				console.log("Wins: " + wins); 
-				reset(); 
-		} 
+	for (var c = 1; c < 13; c++) {
 
-		else if(newScore > compPick) {
-			losses++ ; 
-			$(".losses").html("Losses: " + losses); 
-				console.log("Losses: " + losses); 
-				reset(); 
+		crystals.push(c);
+	}
+
+	// console.log(crystals);
+
+	// ******* GLOBAL VARIABLES *******
+
+	// random variables selected by computer
+	var randNumber; // number to match
+	var crystalNumbers = []; // for array of random crystal values
+
+	var c1;
+	var c2;
+	var c3;
+	var c4;
+
+  var totalScore = 0; // user's score
+
+	var wins = 0;
+	var losses = 0;
+
+	// ******* FUNCTIONS *******
+
+	// pick a random number
+	function pickRandomNumber(arr) {
+
+		var x = arr[Math.floor(Math.random() * arr.length)];
+		randNumber = x;
+		$("#randomNumber").html(randNumber);
+
+		console.log("random number: " + randNumber);
+
+	} // END of pickRandomNumber function
+
+	// pick random numbers for crystals
+
+	function pickRandomCrystals(arr) {
+
+		for (var y = 0; y < 4; y++){
+
+			var a = arr[Math.floor(Math.random() * arr.length)];
+
+			crystalNumbers.push(a);
+		}
+    // check which numbers have been picked
+		console.log("crystal numbers: " + crystalNumbers);
+
+	} // END of pickRandomCrystals function
+
+	function crystalValues(arr) {
+
+		// change value of each crystal button according to array
+		for (i = 0; i < arr.length; i++) {
+
+		$("#button-" + (i+1)).attr("value", arr[i]);
+		console.log(this);
+		}
+		c1 = arr[0];
+		c2 = arr[1];
+		c3 = arr[2];
+		c4 = arr[3];
+	} // END of crystalValues function
+
+	function gameReset(x) {
+
+		crystalNumbers = []; // clears crystal number values
+
+		pickRandomNumber(rand);
+
+		pickRandomCrystals(crystals);
+
+		crystalValues(crystalNumbers);
+
+		totalScore = 0;
+		$("#totalNumber").html(totalScore);
+
+		alert(x);
+	} // END of gameReset function
+
+	// *** GAME SETTINGS AT START ***
+
+	pickRandomNumber(rand); // random number to match
+	pickRandomCrystals(crystals); // array of random crystal values
+	crystalValues(crystalNumbers);
+
+		// crystal button functions
+
+		$("#button-1").on("click", function() {
+
+			totalScore += c1;
+			$("#totalNumber").html(totalScore);
+		});
+
+		$("#button-2").on("click", function() {
+
+			totalScore += c2;
+			$("#totalNumber").html(totalScore);
+		});
+
+		$("#button-3").on("click", function() {
+
+			totalScore += c3;
+			$("#totalNumber").html(totalScore);
+		});
+
+		$("#button-4").on("click", function() {
+
+			totalScore += c4;
+			$("#totalNumber").html(totalScore);
+		});
+
+	$("button").on("click", function() {
+		// this is what happens if the user wins
+		if (totalScore == randNumber) {
+
+			wins++;
+			console.log(totalScore);
+			$("#totalNumber").html(totalScore);
+			$("#wins").html("Wins: " + wins);
+
+
+			setTimeout(function() {gameReset("YOU WIN!!")}, 200);
 		}
 
-	}); 
+		else if (totalScore > randNumber){
 
-}); 
+			losses++;
+			$("#totalNumber").html(totalScore);
+			$("#losses").html("Losses: " + losses);
+
+			setTimeout(function() {gameReset("WOMP-WOMP...YOU LOSE!")}, 200);
+		}
+	});
+
+}); // end of script
