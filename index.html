@@ -1,103 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Crystals Collector</title>
+  <title>simple crystal game</title>
 
-	<!-- reset.css -->
-	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+  <style type="text/css">
 
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-	<link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One|Ek+Mukta" rel="stylesheet">
-
-	<!-- style.css -->
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	 <!-- JQuery -->
-  	<script src="https://code.jquery.com/jquery.js"></script>
+    .crystal-image {
+      width: 300px;
+      height: 300px;
+    }
+  </style>
 
 </head>
 <body>
 
-	<!-- main container -->
-	<div class="container-fluid" id="mainBox">
+  <h1>Number to Guess: <span id="number-to-guess"></span></h1>
 
-		<!-- header -->
-		<div class="jumbotron">
+  <!-- Note that this div is now empty. We will fill it dynamically -->
+  <div id="crystals">
+  </div>
 
-			<h1 class="text-center">Crystals Collector</h1>
+  <!-- JAVASCRIPT  -->
+  <!-- ========================================= -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-			<h2 class="text-center">How to Play</h2>
+  <script type="text/javascript">
 
-			<p class="text-center">
-				You will be given a random number at the start of the game. Use the crystals to match your points to the random number. The value of the crystals changes for every game and you must figure out their values on your own.
-			</p>
-			<p class="text-center">
-				Match your points to the random number to win. If you go over, you lose!
-			</p>
+  var targetNumber = Math.floor(Math.random() * 100) + 1;
+;
 
-		</div>
+  $("#number-to-guess").text(targetNumber);
 
-		<!-- game section -->
-		<div class="row" id="gameSection">
+  var counter = 0;
 
-			<!-- first column for random number -->
-			<div class="col-md-3" id="numberSection">
-				<h3 class="text-center" id="random">Match Number:</h3>
-				<h1 class="numberBox text-center" id="randomNumber">120</h1>
-			</div>
+  // Now for the hard part. Creating multiple crystals each with their own unique number value.
 
-			<!-- second column for buttons -->
-			<div class="col-md-6 text-center" id="buttonSection">
+  // We begin by expanding our array to include four options.
+  var numberOptions = [10, 5, 3, 7];
 
-				<!-- first crystal -->
-				<button id="button-1" value="0"><img src="data:image/png;base64,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" class="img-responsive icons" id="icon1"></button>
+  // Next we create a for loop to create crystals for every numberOption.
+  for (var i = 0; i < numberOptions.length; i++) {
 
-				<!-- second crystal -->
-				<button id="button-2" value="0"><img src="https://stemgemsbook.com/wp-content/uploads/2016/03/pink-gem.png" class="img-responsive icons" id="icon2"></button>
+    // For each iteration, we will create an imageCrystal
+    var imageCrystal = $("<img>");
 
-				<!-- third crystal -->
-				<button id="button-3" value="0"><img src="https://cdn.pixabay.com/photo/2016/04/01/11/32/diamond-1300411__340.png" class="img-responsive icons" id="icon3"></button>
+    // First each crystal will be given the class ".crystal-image".
+    // This will allow the CSS to take effect.
+    imageCrystal.addClass("crystal-image");
 
-				<!-- fourth crystal -->
-				<button id="button-4" value="0"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcCcPGv5gkNEdsuBEToW1leQ4Ms5PrSyjYeDVnycBGxVJwpTrU" class="img-responsive icons" id="icon4"></button>
+    // Each imageCrystal will be given a src link to the crystal image
+    imageCrystal.attr("src", "http://cdn.playbuzz.com/cdn/35910209-2844-45c0-b099-f4d82878d54f/00261fda-4062-4096-81fd-8cf96b9034e8.jpg");
 
-			</div>
+    // Each imageCrystal will be given a data attribute called data-crystalValue.
+    // This data attribute will be set equal to the array value.
+    imageCrystal.attr("data-crystalvalue", numberOptions[i]);
 
-			<!-- third column for total points -->
-			<div class="col-md-3" id="totalPoints">
-				<h3 class="text-center" id="score">Your Total Score:</h3>
-				<h1 class="numberBox text-center" id="totalNumber">0</h1>
-			</div>
+    // Lastly, each crystal image (with all it classes and attributes) will get added to the page.
+    $("#crystals").append(imageCrystal);
+  }
 
-		</div>
+  // This time, our click event applies to every single crystal on the page. Not just one.
+  $(".crystal-image").on("click", function() {
 
-		<!-- footer section with tracking wins and losses -->
-		<div class="row" id="scoreSection">
+    // Determining the crystal's value requires us to extract the value from the data attribute.
+    // Using the $(this) keyword specifies that we should be extracting the crystal value of the clicked crystal.
+    // Using the .attr("data-crystalvalue") allows us to grab the value out of the "data-crystalvalue" attribute.
+    // Since attributes on HTML elements are strings, we must convert it to an integer before adding to the counter
 
-			<!-- spacer column -->
-			<div class="col-md-4"></div>
+    var crystalValue = ($(this).attr("data-crystalvalue"));
+    crystalValue = parseInt(crystalValue);
+    // We then add the crystalValue to the user's "counter" which is a global variable.
+    // Every click, from every crystal adds to the global counter.
+    counter += crystalValue;
 
-			<!-- wins column -->
-			<div class="col-md-2" id="winSection">
-				<h3 class="text-center" id="wins">Wins:	0</h3>
-			</div>
+    // All of the same game win-lose logic applies. So the rest remains unchanged.
+    alert("New score: " + counter);
 
-			<!-- losses column -->
-			<div class="col-md-2" id="lossSection">
-				<h3 class="text-center" id="losses">Losses: 0</h3>
-			</div>
+    if (counter === targetNumber) {
+      alert("You win!")
 
-			<!-- spacer column -->
-			<div class="col-md-4"></div>
+    }
 
-		</div>
+    else if (counter >= targetNumber) {
+      alert("You lose!!");
 
-	</div>
+}
 
+  });
+
+  </script>
 </body>
-
-<script src="assets/javascript/game.js"></script>
-
 </html>
